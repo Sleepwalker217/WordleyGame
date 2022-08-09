@@ -1,0 +1,3 @@
+<Rectangle Fill="White" Grid.Row="1" Height="50" Width="50" RadiusX="10" RadiusY="10" Stroke="LightGray" StrokeThickness="6" />
+
+<TextBlock Text="5" FontSize="40" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 0 5" FontWeight="Medium"/>
