@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:WordleyGame"
         mc:Ignorable="d"
         Title="WordleyGame" Height="800" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid x:Name="MainGrid" Background="#ffdadada" Focusable="True" KeyDown="Grid_KeyDown">   
+    <Grid x:Name="MainGrid" Background="#ffdadada" Focusable="True" KeyDown="Grid_KeyDown">
         <Border Margin="20" Background="White" CornerRadius="30">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="30" Color="LightGray"  ShadowDepth="0"/>
             </Border.Effect>
             <Grid x:Name="btnGrid" Background="White" Margin="30">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/> 
+                    <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -27,9 +27,15 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="Test" Text="Guess the Word" FontSize="50" Grid.ColumnSpan="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold"/>
 
+                <Rectangle Fill="Yellow" Grid.Row="7" MaxHeight="30" MaxWidth="30" Margin="-25,0,25,30"  Stroke="Black" StrokeThickness="2" />
+                <Rectangle Fill="LightGreen" Grid.Row="7" MaxHeight="30" MaxWidth="30" Margin="54,0,24,30" Grid.Column="2" Grid.ColumnSpan="2" Stroke="Black" StrokeThickness="2"  />
+
+                <TextBlock Grid.Row="7" FontSize="20" Margin="0,12,0,1" Grid.ColumnSpan="2" Grid.Column="3"><Run Text="       - Letter is on "/><LineBreak/><Run Text="right position"/></TextBlock>
+                <TextBlock Grid.Row="7" FontSize="20" Margin="0,12,0,1" Grid.ColumnSpan="2"><Run Text="       - Letter is on "/><LineBreak/><Run Text="wrong position"/></TextBlock>
             </Grid>
         </Border>
     </Grid>
