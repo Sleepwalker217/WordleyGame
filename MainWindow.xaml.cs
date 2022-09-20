@@ -16,19 +16,17 @@ using System.IO;
 
 namespace WordleyGame
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
 
         List<List<Rectangle>> full_recs = new List<List<Rectangle>>(); // двумерный массив прямоугольников
         List<List<TextBlock>> full_boxes = new List<List<TextBlock>>(); // двумерный массив символов внутри прямоугольников
         
-        
+               
         private const int MAX_X = 5;
         private const int MAX_Y = 6;
 
+        // Глобальные переменные
         byte indexX = 0;
         byte indexY = 0;
         char[] chars = {' ', ' ', ' ', ' ', ' '};
@@ -38,6 +36,7 @@ namespace WordleyGame
         {
             InitializeComponent();
             MainGrid.Focus();
+            this.Topmost = true;
             // создание элементов
             for (int i = 0; i < MAX_Y; i++)
             {
@@ -78,29 +77,11 @@ namespace WordleyGame
                 full_recs.Add(recs);
                 full_boxes.Add(boxes);
             }
-
-            /*
-            // создание кнопки с галочкой
-            Button tick = new Button
-            {
-                BorderThickness = new Thickness(0),
-                Background = new ImageBrush(new BitmapImage(new Uri("tick.jpg", UriKind.Relative))),
-                Width = 50,
-                Height = 50,
-                Focusable = false
-            };
-            Grid.SetColumn(tick, 5);
-            Grid.SetRow(tick, 1);
-            btnGrid.Children.Add(tick);
-            */
-
             Rand_word();
-
             full_recs[0][0].Stroke = Brushes.Gray;
-
-
         }
 
+        // Длина слова (для дальнейшего расширения до более 6 букв в слове)
         int Words_length()
         {
             StreamReader reader = new StreamReader(@"Words.txt");
@@ -109,31 +90,37 @@ namespace WordleyGame
             return res;
         }
 
+        // Отлов нажатия клавиш
         private void Grid_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {
+                //Перемещение влево
                 case Key.Left:
                     if (indexX != 0) indexX--;
                     full_recs[indexY][indexX].Stroke = Brushes.Gray;
                     full_recs[indexY][indexX+1].Stroke = Brushes.LightGray;
                     break;
-               
+
+                //Перемещение вправо
                 case Key.Right:
                     if (indexX != MAX_X-1) indexX++;
                     full_recs[indexY][indexX].Stroke = Brushes.Gray;
                     full_recs[indexY][indexX-1].Stroke = Brushes.LightGray;
                     break;
                 
+                //Применить (enter)
                 case Key.Enter:
                     char[] tmp_word = word.ToCharArray();
                     if (!chars.Contains(' '))
                     {
+
                         if (new string(chars) == word)
                         {
-                            MessageBox.Show("Congratulations!\nPress OK or ENTER to start a New Game");
-                            Restart();
-                            break;
+                            string fin = string.Format("The word was {0}", word);
+                            Msg.Visibility = Visibility.Visible;
+                            MsgText.Text = "You Win!";
+                            MsgWord.Text = fin;
                         }
                         for (int i = 0; i < MAX_X; i++)
                         {
@@ -155,17 +142,22 @@ namespace WordleyGame
                         }
                         else 
                         {
-                            string you_lost = string.Format("You lost\nThe word was {0}\nPress OK or ENTER to start a New Game",word); 
-                            MessageBox.Show(you_lost);
-                            Restart();
-                        }
+                            if (new string(chars) != word)
+                            {
+                                string fin = string.Format("The word was {0}", word);
+                                Msg.Visibility = Visibility.Visible;
+                                MsgText.Text = "You Lose!";
+                                MsgWord.Text = fin;
+                            }
                         
-
+                        }
                     }
                     break;
-                
+
+                //Остальные клваиши
                 default:
                     string temp = e.Key.ToString();
+                    //Проверка является ли нажатая клавиша буквой
                     if (temp.Length == 1)
                     {
                         full_boxes[indexY][indexX].Text = temp;
@@ -175,13 +167,10 @@ namespace WordleyGame
                         full_recs[indexY][indexX].Stroke = Brushes.Gray;
                         full_recs[indexY][indexX - 1].Stroke = Brushes.LightGray;
                     }
-
                     break;
             }
-
-
         }
-
+        // Перезапуск игры
         private void Restart()
         {
             indexX = 0;
@@ -196,14 +185,11 @@ namespace WordleyGame
                     chars[j] = ' ';
                     full_recs[indexY][indexX].Stroke = Brushes.Gray;
                 }
-
-                    
-
             }   
             Rand_word();
-
         }
 
+        //Выбор рандомного слова
         private void Rand_word()
         {
             Random rnd = new Random();
@@ -212,5 +198,40 @@ namespace WordleyGame
             for (int i = 0; i < choose; i++) words.ReadLine();
             word = words.ReadLine();
         }
+
+        //Перетягивание окна
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
+        }
+
+        //Нажатие кнопки выхода
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        //Нажатие кнопки свернуть
+        private void minBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        // Нажатие кнопки New Game 
+        private void btnNew_Click(object sender, RoutedEventArgs e)
+        {
+            Restart();
+            Msg.Visibility = Visibility.Hidden;
+            MainGrid.Focus();
+        }
+
+        //Нажатие кнопки Exit
+        private void exitBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+
     }
 }

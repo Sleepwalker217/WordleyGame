@@ -5,13 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WordleyGame"
         mc:Ignorable="d"
-        Title="WordleyGame" Height="800" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid x:Name="MainGrid" Background="#ffdadada" Focusable="True" KeyDown="Grid_KeyDown">
+        Title="WordleyGame" Height="800" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        WindowStyle="None" AllowsTransparency="True" MouseDown="Window_MouseDown">
+
+    <Window.Resources>
+        <Style x:Key="NullFocus"/>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border  BorderBrush="LightGray" BorderThickness="4" Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            
+        </Style>
+
+    </Window.Resources>
+
+
+    <Window.Background>
+        <SolidColorBrush Opacity="0.5"/>
+    </Window.Background>
+    <Grid x:Name="MainGrid" Background="Transparent" Focusable="True" KeyDown="Grid_KeyDown" FocusVisualStyle="{DynamicResource NullFocus}">
         <Border Margin="20" Background="White" CornerRadius="30">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="30" Color="LightGray"  ShadowDepth="0"/>
             </Border.Effect>
-            <Grid x:Name="btnGrid" Background="White" Margin="30">
+            <Grid x:Name="btnGrid" Background="White" Margin="30,45,30,30">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -29,14 +53,72 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock x:Name="Test" Text="Guess the Word" FontSize="50" Grid.ColumnSpan="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold"/>
+                <TextBlock Text="Guess the Word" FontSize="50" Grid.ColumnSpan="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold"/>
 
-                <Rectangle Fill="Yellow" Grid.Row="7" MaxHeight="30" MaxWidth="30" Margin="-25,0,25,30"  Stroke="Black" StrokeThickness="2" />
-                <Rectangle Fill="LightGreen" Grid.Row="7" MaxHeight="30" MaxWidth="30" Margin="54,0,24,30" Grid.Column="2" Grid.ColumnSpan="2" Stroke="Black" StrokeThickness="2"  />
+                <Rectangle Fill="Yellow" Grid.Row="7" MaxHeight="30" MaxWidth="30" Margin="-25,6,25,24"  Stroke="Black" StrokeThickness="2" />
+                <Rectangle Fill="LightGreen" Grid.Row="7" MaxHeight="30" MaxWidth="30" Margin="54,5,24,25" Grid.Column="2" Grid.ColumnSpan="2" Stroke="Black" StrokeThickness="2"  />
 
-                <TextBlock Grid.Row="7" FontSize="20" Margin="0,12,0,1" Grid.ColumnSpan="2" Grid.Column="3"><Run Text="       - Letter is on "/><LineBreak/><Run Text="right position"/></TextBlock>
-                <TextBlock Grid.Row="7" FontSize="20" Margin="0,12,0,1" Grid.ColumnSpan="2"><Run Text="       - Letter is on "/><LineBreak/><Run Text="wrong position"/></TextBlock>
+                <TextBlock Grid.Row="7" FontSize="20" Margin="0,20,0,1" Grid.ColumnSpan="2" Grid.Column="3"><Run Text="       - Letter is on "/><LineBreak/><Run Text="right position"/></TextBlock>
+                <TextBlock Grid.Row="7" FontSize="20" Margin="0,20,0,1" Grid.ColumnSpan="2"><Run Text="       - Letter is on "/><LineBreak/><Run Text="wrong position"/></TextBlock>
+            </Grid>
+
+        </Border>
+        <Border x:Name="Msg" Background="White" Margin="35, 315" CornerRadius="40" Visibility="Hidden">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="40" Color="Gray"  ShadowDepth="0"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="59*"/>
+                    <RowDefinition Height="36*"/>
+                    <RowDefinition Height="75*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock x:Name="MsgText" Text="You Win!" FontSize="45" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontWeight="DemiBold"/>
+                <TextBlock x:Name="MsgWord" Text="The word was ABOBA" FontSize="25" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+                <Button x:Name="btnNew" Grid.Row="2" Margin="30, 15" Click="btnNew_Click" >
+                    <TextBlock Text="New Game" FontSize="25" FontWeight="Medium"/>
+                </Button>
+                <Button x:Name="btnExit" Grid.Row="2" Grid.Column="2" Margin="30, 15" Click="btnExit_Click">
+                    <TextBlock Text="Exit" FontSize="25" />
+                </Button>
+
             </Grid>
         </Border>
+
+        <Border Margin="50,40,50,725" Background="Transparent">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="minBtn" Click="minBtn_Click" Focusable="False">
+                    <TextBlock Text="-" FontSize="55" VerticalAlignment="Center" Height="85" Foreground="Gray" />
+                </Button>
+
+                <Button x:Name="exitBtn"  Grid.Column="6" Click="exitBtn_Click" Focusable="False" >
+                    <TextBlock Text="x" FontSize="30" VerticalAlignment="Center" Height="48" Foreground="Gray" />
+                </Button>
+            </Grid>
+        </Border>
+
+        <Border x:Name="helpScreen" Background="White" CornerRadius="30" Margin="20" Visibility="Hidden">
+            <Grid>
+                <Button x:Name="exitHelp" BorderBrush="LightGray" Background="Transparent" BorderThickness="4" Click="exitBtn_Click" Focusable="False" Margin="374,20,30,706" >
+                    <TextBlock Text="x" FontSize="30" VerticalAlignment="Center" Height="48" Foreground="Gray" />
+                </Button>
+            </Grid>
+        </Border>
+
     </Grid>
+
 </Window>
